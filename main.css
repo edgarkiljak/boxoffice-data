@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css?family=Abril+Fatface');
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+@import url('https://fonts.googleapis.com/css?family=Anonymous+Pro');
+@import url('https://fonts.googleapis.com/css?family=Crimson+Text');
+@import url('https://fonts.googleapis.com/css?family=Source+Serif+Pro');
+@import url('https://fonts.googleapis.com/css?family=Old+Standard+TT');
+
+body,
+* {
+    top: 0;
+    left: 0;
+    margin: 0;
+    background-color: #F5FFFA;
+    overflow: scroll;
+}
+
+
+.bar-chart {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.text {
+    font-family: 'Anonymous Pro', monospace;
+    font-size: 14px;
+}
+
+.full-list {
+    width: auto;
+    display: block;
+    line-height: 15px;
+    text-align: center;
+    position: relative;
+    margin-top: 50%;
+    padding-top: 84px;
+    padding-right: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0.5rem;
+    background-color: #171618;
+    top:0;
+}
+
+.titles {
+    position: relative;
+    float: left;
+    display: inline-block;
+    font-family: 'Anonymous Pro', monospace;
+    font-size: 10px;
+    padding: 10px;
+    color: #b2abb6;
+    line-height: 1.5px;
+    background-color: #171618;
+    cursor: pointer;
+    pointer-events: visible;
+}
+
+h1 {
+    font-family: 'Old Standard TT', serif;
+    font-size: 24px;
+    background-color: #171618;
+    color: #EFEFEF;
+    padding: 12px 0 30px 0;
+}
+
+h3 {
+    background-color: #171618;
+    color: #b2abb6;
+    font-family: 'Anonymous Pro', monospace;
+    font-size: 15px;
+    margin: 1.5rem 0;
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    text-align: left;
+}
+
+.bridge {
+    top:0;
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 1em .75rem;
+    padding-bottom: 0;
+    background-color: #171618;
+    line-height: 27px;
+}
+
+.find {
+    position: relative;
+    width: 100%;
+    height: 40px;
+    background-color: #171618;
+    overflow: hidden;
+    overflow-x: hidden;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.search-box {
+    position: relative;
+    top: -10px;
+    margin: 0 auto;
+    width: 20rem;
+    height: 40px;
+    font-size: 40rem;
+    border-bottom: 1px solid #b2abb6;
+    background-color: #171618;
+    display: block;
+    margin-bottom: 3rem;
+    overflow: hidden;
+    overflow-x: hidden;
+}
+
+input {
+    top: -186px;
+    width: 100%;
+    font-size: 21px;
+    font-weight: 100;
+    background-color: #171618;
+    color: #EFEFEF;
+    border: none;
+    overflow-x: hidden;
+    position: relative;
+}
+
+input:focus {
+    outline: none;
+}
+
+.search-icon {
+    position: relative;
+    left: 151px;
+    top: -403px;
+    background-color: #171618;
+    -webkit-text-fill-color: #171618;
+    background: transparent;
+    overflow: hidden;
+}
+
+.search-icon svg {
+    fill: #EFEFEF;
+    background-color: #171618;
+    width: 20px;
+    height: 20px;
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index:3;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+ul {
+  list-style: none; /* Remove default bullets */
+   background-color: #171618;
+}
+
+ul li::after {
+    content: "\2022";
+    fill: #322e34;
+    color: #322e34;
+    width: 0.5px;
+    margin-left: 20px;
+    margin-right: 1px;
+    font-size: 5px;
+}
+
+.alphabet {
+    display: block;
+    clear: both;
+    color: #e85c86;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 11px;
+}
+
+#search-movie {
+    background-color: #171618;
+    overflow: hidden;
+}
+
+.found {
+    background-color: white;
+    opacity: 0.8; 
+}
+
