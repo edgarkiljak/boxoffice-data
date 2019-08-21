@@ -10,18 +10,21 @@ body,
     top: 0;
     left: 0;
     margin: 0;
-    background-color: #F5FFFA;
+    /* background-color: grey; */
+    background-color: black;
     overflow: scroll;
 }
 
 
+
+
 .bar-chart {
-    position: absolute;
-    top: 0;
+    position: relative;
+    top: 800px;
     bottom: 0;
     left: 0;
     right: 0;
-    margin: auto;
+    margin-top: 50px;
 }
 
 .text {
@@ -190,5 +193,21 @@ ul li::after {
 .found {
     background-color: white;
     opacity: 0.8; 
+}
+
+.axis path,
+        .axis line {
+        fill: none;
+        shape-rendering: crispEdges;
+        }
+
+.x_axis{
+    z-index: 1;
+    font-family: 'Anonymous Pro', monospace;
+    font-size: 150px;
+    font-weight: bolder !important;
+    color: white;
+    opacity: 0.2;
+    stroke-width: 0;
 }
 

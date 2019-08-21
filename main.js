@@ -1,32 +1,30 @@
 //SVG width and height, margin
 const margin = {
   top: 10,
-  right: 20,
+  right: 120,
   bottom: -10,
-  left: 20
+  left: 120
 };
 
-const fullSVGWidth = 700 + margin.right + margin.left;
-const fullSVGHeight = 500 + margin.top + margin.bottom;
+const fullSVGWidth =
+  (window.innerWidth || document.documentElement.clientWidth) + 12000;
+console.log("This is your window width: ", fullSVGWidth);
+const fullSVGHeight =
+  window.innerHeight || document.documentElement.clientHeight;
+console.log("This is your window height: ", fullSVGHeight);
 
 //SVG
 const svg = d3
-  .select(".visual")
+  .select(".curve")
   .append("svg")
-  .attr("class", "bar-chart")
   .attr("width", fullSVGWidth)
-  .attr("height", fullSVGHeight);
+  .attr("height", fullSVGHeight)
+  .attr("z-index", 3);
 
-//x and y range
-const xScale = d3
-  .scaleBand()
-  .range([0, fullSVGWidth - margin.right - margin.left]);
-
-const yScale = d3
-  .scaleBand()
-  .range([fullSVGHeight - margin.top - margin.bottom, 0]);
+const color = d3.scaleSequential(d3.interpolateReds).domain([1, 2800000000]);
 
 d3.json("data.json")
+
   .then(data => {
     //  console.log(data);
     var combined = [];
@@ -39,86 +37,195 @@ d3.json("data.json")
       return +a.revenue - +b.revenue;
     });
 
-    const color = d3
-      .scaleSequential(d3.interpolateReds)
+    /**************************************
+    
+            FILM AREA CHART STARTS
+    
+    **************************************/
+
+    const color1 = d3
+      .scaleSequential(d3.interpolateWarm)
       .domain([1, 2800000000]);
 
-    console.log("sorted combined data", combined);
-    //x and y domain
-    xScale.domain(combined.map(d => d.revenue));
-    yScale.domain(combined.map(d => d.original_title));
+    /**************************************
+     
+             FILM AREA CHART STARTS
+     
+     **************************************/
 
-    let rect = svg
-      .selectAll("g")
-      .data(combined)
-      .enter()
+    //  console.log(data);
+    var combined1 = [];
+    for (let i = 0; i < data.length; i++) {
+      combined1.push(...data[i].results);
+    }
+    console.log("new combined data", combined1);
+
+    combined.sort(function(a, b) {
+      return +a.revenue - +b.revenue;
+    });
+
+    /**************************************
+    
+            FILM AREA CHART STARTS
+    
+    **************************************/
+
+    //Calculate mean box / mean revenue
+    const meanBox = d3.mean(combined1, d => d.revenue);
+    console.log("box mean is: ", meanBox);
+
+    //Movie object
+    const startYear = new Date("January 1, 1950 00:00:00");
+    console.log("start year is: ", startYear);
+
+    const movies = combined1
+      .map(d => {
+        const date = new Date(d.release_date);
+        const revenue = parseInt(d.revenue);
+        return {
+          title: d.title,
+          date,
+          revenue
+        };
+        // })
+      })
+      .filter(d => d.date >= startYear);
+
+    console.log("movies:", movies);
+
+    const [minDate, maxDate] = d3.extent(movies, d => d.date);
+
+    //x-scale, time scale
+    const xScale1 = d3
+      .scaleTime()
+      .domain([d3.timeYear.floor(minDate), d3.timeYear.floor(maxDate)])
+      .range([margin.left, fullSVGWidth - margin.right]);
+
+    console.log("domain " + xScale1.domain() + " range" + xScale1.range());
+
+    //x-axis
+    let xAxis = d3
+      .axisBottom(xScale1)
+      .tickSizeInner([0])
+      .tickSizeOuter([0]);
+
+    svg
       .append("g")
-      .on("mouseover", function() {
-        d3.select(this)
-          .append("text")
-          .attr("class", "text")
-          .attr("x", function(d) {
-            return xScale(d.revenue);
-          })
-          .attr("y", function(d) {
-            return yScale.bandwidth() + 175;
-          })
-          .style("font-size", 10)
-          .attr("dy", -20)
-          .attr("dx", function(d, i) {
-            if (d.title.length > 5 && d3.select(this).attr("x") > 400) {
-              return -100;
-            }
-            if (d.title.length > 10 && d3.select(this).attr("x") > 400) {
-              return -1200;
-            } else {
-              return 10;
-            }
-          })
-          .text(d => d.title);
-      })
-      .on("mouseout", function() {
-        d3.select(".text").remove();
-      });
+      .attr("class", "x_axis")
+      .attr("transform", "translate(" + 0 + "," + (fullSVGHeight - 680) + ")")
+      .call(xAxis);
 
-    let bars = rect
-      .append("rect")
-      .attr("class", "film-elem")
-      .attr("width", 10000 / 10)
-      .attr("height", 0)
-      .attr("x", d => 500000)
-      .attr("y", function(d) {
-        return yScale.bandwidth() + 175;
-      })
+    //y-scale, box office
+    const boxExtent = d3.extent(combined1, d => d.revenue - meanBox);
+    const yScale1 = d3
+      .scaleLinear()
+      .domain(boxExtent)
+      .range([fullSVGHeight - margin.bottom, fullSVGHeight - margin.top - 800]);
 
-      .on("mouseover", function() {
-        d3.select(this).call(strokeWidth);
-      })
-      .on("mouseout", function() {
-        d3.select(this).call(noStroke);
-      });
+    console.log(yScale1.domain(), yScale1.range());
 
-    bars
-      .transition()
-      .duration(1000)
-      .delay(function(d, i) {
-        return i * 5;
-      })
+    //highest revenue
+    const highestRevenue = d3.max(movies, d => d.revenue);
+
+    //Area generator
+    const area = d3
+      .area()
+      .x(d => xScale1(d.date))
+      .y0(d => yScale1(d.val))
+      .y1(d => yScale1(0))
+      .curve(d3.curveCatmullRom);
+
+    //curves
+    const curve = svg
+      .selectAll("path.curve")
+      .data(movies)
+      .enter()
+      .append("path")
+      .classed("curve", true)
+      .attr("d", d =>
+        area([
+          {
+            date: d3.timeMonth.offset(d.date, -10),
+            val: 0
+          },
+          {
+            date: d.date,
+            val: 0
+          },
+          {
+            date: d3.timeMonth.offset(d.date, 10),
+            val: 0
+          }
+        ])
+      )
+
       .attr("fill", function(d) {
-        return color(+d.revenue);
+        if (d.revenue === highestRevenue) {
+          return "pink";
+        } else if (d.revenue <= 100000000) {
+          return "black";
+        } else {
+          return "white";
+        }
       })
-      .attr("width", xScale.bandwidth())
-      .attr("height", 80)
-      .attr("x", d => xScale(d.revenue))
-      .attr("y", function(d) {
-        return yScale.bandwidth() + 175;
+      .attr("opacity", function(d) {
+        if (d.revenue <= 1000000000) {
+          return 0.1;
+        } else {
+          return 0.4;
+        }
       });
 
-  /**************************************
-  
-  THIS IS FILM LIST ELEMETNS / TEXT BLOCK
-  
-  **************************************/
+    curve
+      .transition()
+      .duration(10000)
+      .attr("d", d =>
+        area([
+          {
+            date: d3.timeMonth.offset(d.date, -10),
+            val: 0
+          },
+          {
+            date: d.date,
+            val: d.revenue - meanBox
+          },
+          {
+            date: d3.timeMonth.offset(d.date, 10),
+            val: 0
+          }
+        ])
+      );
+
+    //points
+    const points = svg
+      .selectAll("g")
+      .data(movies)
+      .enter()
+      .append("circle")
+      .attr("class", "points");
+
+    points
+      .attr("cx", function(d) {
+        return xScale1(d.date);
+      })
+      .attr("cy", function(d) {
+        return yScale1(d.revenue - meanBox);
+      })
+      .attr("r", 2.5)
+      .attr("opacity", 0.4)
+      .style("fill", "yellow");
+
+    /**************************************
+    
+            FILM AREA CHART ENDS
+    
+    **************************************/
+
+    /**************************************
+    
+    THIS IS FILM LIST ELEMETNS / TEXT BLOCK
+    
+    **************************************/
 
     //Sort data by title in alphabetic order
     function sortByTitle(a, b) {
@@ -229,11 +336,11 @@ d3.json("data.json")
     }
     injectAllAlphabetLetters();
 
-/*************************************
-  
-END OF FILM LIST ELEMETNS / TEXT BLOCK
-  
-**************************************/
+    /*************************************
+      
+    END OF FILM LIST ELEMETNS / TEXT BLOCK
+      
+    **************************************/
 
     //Bar chart styling
     function strokeWidth(selection) {
@@ -252,21 +359,24 @@ END OF FILM LIST ELEMETNS / TEXT BLOCK
 
     const searchValue = document.getElementById("input-value");
 
-    document.querySelector("form#search-movie").addEventListener("submit", function(e) {
+    document
+      .querySelector("form#search-movie")
+      .addEventListener("submit", function(e) {
         //prevent the normal submission of the form
         e.preventDefault();
-        
-        
-        const movieIDs = document.querySelectorAll('li');
 
-        for (let i = 0; i < movieIDs.length; i++){
+        const movieIDs = document.querySelectorAll("li");
+
+        for (let i = 0; i < movieIDs.length; i++) {
           if (searchValue.value === movieIDs[i].innerHTML) {
-            console.log('found');
-            movieIDs[i].innerHTML = "<span style ='background-color:white;padding: 5px 5px 5px 10px;'>" + movieIDs[i].innerHTML+" </span>"
+            console.log("found");
+            movieIDs[i].innerHTML =
+              "<span style ='background-color:white;padding: 5px 5px 5px 10px;'>" +
+              movieIDs[i].innerHTML +
+              " </span>";
             // document.getElementById(movieIDs[i]).classList.add('found');
           }
         }
-      
       });
 
     /*****************

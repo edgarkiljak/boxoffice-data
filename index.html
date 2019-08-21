@@ -1,52 +1,72 @@
 <!DOCTYPE html>
-<html lang='en'>
-
-<head>
-    <meta charset='UTF-8'>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
     <title>Box Office</title>
-    <script src='https://d3js.org/d3.v5.min.js'></script>
-    <script src='https://d3js.org/d3-collection.v1.min.js'></script>
-    <script src='https://d3js.org/d3-dispatch.v1.min.js'></script>
-    <script src='https://d3js.org/d3-dsv.v1.min.js'></script>
-    <script src='https://d3js.org/d3-request.v1.min.js'></script>
-    <script src='https://d3js.org/d3-dsv.v1.min.js'></script>
-    <script src='https://d3js.org/d3-fetch.v1.min.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.js'></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-collection.v1.min.js"></script>
+    <script src="https://d3js.org/d3-dispatch.v1.min.js"></script>
+    <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
+    <script src="https://d3js.org/d3-request.v1.min.js"></script>
+    <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
+    <script src="https://d3js.org/d3-fetch.v1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.js"></script>
     <!-- Set attr and style by using objects -->
-    <script src='https://d3js.org/d3-selection-multi.v0.4.min.js'></script>
-    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.8.1/css/all.css' integrity='sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf' crossorigin='anonymous'>
-    <script src='https://use.fontawesome.com/43f8201759.js'></script>
-    <link rel='stylesheet'  type = 'text/css' href='main.css'/>
-</head>
+    <script src="https://d3js.org/d3-selection-multi.v0.4.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+      crossorigin="anonymous"
+    />
+    <script src="https://use.fontawesome.com/43f8201759.js"></script>
+    <link rel="stylesheet" type="text/css" href="main.css" />
+  </head>
 
-<body>
-     
-       
-        <div class='visual'></div>
-        <div class='full-list'>
-            <h1>FULL LIST OF MOVIES</h1>
-            <div class='bridge'>
-                <h3>To see the entire list of movies,
-                    <span style='color:#E85C86;background-color: #171618;'>below you can search for any of the 2,000 movies </span>, and bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla.
-                </h3>
-            </div>
-            <div class='find'>
-                <div class='search-box'>
-                    <form id='search-movie'>
-                            <input type='text' id='input-value' name='title' placeholder='Find a movie'/>
-                    </form>
-                    <div class='search-icon'>
-                            <svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 32 32' version='1.1' width='32px' height='32px'>
-                                <g id='surface1'>
-                                <path style=' ' d='M 19 3 C 13.488281 3 9 7.488281 9 13 C 9 15.394531 9.839844 17.589844 11.25 19.3125 L 3.28125 27.28125 L 4.71875 28.71875 L 12.6875 20.75 C 14.410156 22.160156 16.605469 23 19 23 C 24.511719 23 29 18.511719 29 13 C 29 7.488281 24.511719 3 19 3 Z M 19 5 C 23.429688 5 27 8.570313 27 13 C 27 17.429688 23.429688 21 19 21 C 14.570313 21 11 17.429688 11 13 C 11 8.570313 14.570313 5 19 5 Z '/>
-                                </g>
-                            </svg>
-                    </div>
-                </div>
-            </div>
+  <body>
+    <div class="curve"></div>
+    <div class="full-list">
+      <h1>FULL LIST OF MOVIES</h1>
+      <div class="bridge">
+        <h3>
+          To see the entire list of movies,
+          <span style="color:#E85C86;background-color: #171618;"
+            >below you can search for any of the 2,000 movies </span
+          >, and bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla
+          bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla.
+        </h3>
+      </div>
+      <div class="find">
+        <div class="search-box">
+          <form id="search-movie">
+            <input
+              type="text"
+              id="input-value"
+              name="title"
+              placeholder="Find a movie"
+            />
+          </form>
+          <div class="search-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              viewBox="0 0 32 32"
+              version="1.1"
+              width="32px"
+              height="32px"
+            >
+              <g id="surface1">
+                <path
+                  style=" "
+                  d="M 19 3 C 13.488281 3 9 7.488281 9 13 C 9 15.394531 9.839844 17.589844 11.25 19.3125 L 3.28125 27.28125 L 4.71875 28.71875 L 12.6875 20.75 C 14.410156 22.160156 16.605469 23 19 23 C 24.511719 23 29 18.511719 29 13 C 29 7.488281 24.511719 3 19 3 Z M 19 5 C 23.429688 5 27 8.570313 27 13 C 27 17.429688 23.429688 21 19 21 C 14.570313 21 11 17.429688 11 13 C 11 8.570313 14.570313 5 19 5 Z "
+                />
+              </g>
+            </svg>
+          </div>
         </div>
+      </div>
+    </div>
 
-        <script type='text/javascript' src='main.js'></script>
-</body>
-
+    <script type="text/javascript" src="main.js"></script>
+  </body>
 </html>
